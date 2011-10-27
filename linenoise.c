@@ -23,8 +23,8 @@
 #include <lauxlib.h>
 #include <linenoise.h>
 
-static int completionFuncRef;
-static lua_State *completionState;
+static int completion_func_ref;
+static lua_State *completion_state;
 
 static int handle_ln_error(lua_State *L)
 {
@@ -38,11 +38,11 @@ static int handle_ln_ok(lua_State *L)
     return 1;
 }
 
-static void completionCallbackWrapper(const char *line, linenoiseCompletions *completions)
+static void completion_callback_wrapper(const char *line, linenoiseCompletions *completions)
 {
-    lua_State *L = completionState;
+    lua_State *L = completion_state;
 
-    lua_rawgeti(L, LUA_REGISTRYINDEX, completionFuncRef);
+    lua_rawgeti(L, LUA_REGISTRYINDEX, completion_func_ref);
     lua_pushlightuserdata(L, completions);
     lua_pushstring(L, line);
 
@@ -54,9 +54,9 @@ static int l_linenoise(lua_State *L)
     const char *prompt = luaL_checkstring(L, 1);
     const char *line;
 
-    completionState = L;
+    completion_state = L;
     line = linenoise(prompt);
-    completionState = NULL;
+    completion_state = NULL;
 
     if(! line) {
         return handle_ln_error(L);
@@ -118,8 +118,8 @@ static int l_setcompletion(lua_State *L)
     luaL_checktype(L, 1, LUA_TFUNCTION);
 
     lua_pushvalue(L, 1);
-    completionFuncRef = luaL_ref(L, LUA_REGISTRYINDEX);
-    linenoiseSetCompletionCallback(completionCallbackWrapper);
+    completion_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+    linenoiseSetCompletionCallback(completion_callback_wrapper);
 
     return 0;
 }

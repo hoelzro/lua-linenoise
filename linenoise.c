@@ -26,64 +26,85 @@
 static int completionFuncRef;
 static lua_State *completionState;
 
+static int handle_ln_error(lua_State *L)
+{
+    lua_pushnil(L);
+    return 1;
+}
+
+static int handle_ln_ok(lua_State *L)
+{
+    lua_pushboolean(L, 1);
+    return 1;
+}
+
 static void completionCallbackWrapper(const char *line, linenoiseCompletions *completions)
 {
     lua_State *L = completionState;
-    int status;
 
     lua_rawgeti(L, LUA_REGISTRYINDEX, completionFuncRef);
     lua_pushlightuserdata(L, completions);
     lua_pushstring(L, line);
 
-    /* XXX error handling */
-    status = lua_pcall(L, 2, 0, 0);
+    lua_pcall(L, 2, 0, 0);
 }
 
 static int l_linenoise(lua_State *L)
 {
     const char *prompt = luaL_checkstring(L, 1);
+    const char *line;
 
     completionState = L;
-    lua_pushstring(L, linenoise(prompt));
+    line = linenoise(prompt);
     completionState = NULL;
 
+    if(! line) {
+        return handle_ln_error(L);
+    }
+    lua_pushstring(L, line);
     return 1;
 }
 
-/* XXX error checking */
 static int l_historyadd(lua_State *L)
 {
     const char *line = luaL_checkstring(L, 1);
 
-    linenoiseHistoryAdd(line);
+    if(! linenoiseHistoryAdd(line)) {
+        return handle_ln_error(L);
+    }
 
-    return 0;
+    return handle_ln_ok(L);
 }
 
-/* XXX error checking */
 static int l_historysetmaxlen(lua_State *L)
 {
     int len = luaL_checkinteger(L, 1);
 
-    linenoiseHistorySetMaxLen(len);
+    if(! linenoiseHistorySetMaxLen(len)) {
+        return handle_ln_error(L);
+    }
 
-    return 0;
+    return handle_ln_ok(L);
 }
 
-/* XXX error checking */
 static int l_historysave(lua_State *L)
 {
     const char *filename = luaL_checkstring(L, 1);
 
-    linenoiseHistorySave((char *) filename);
+    if(linenoiseHistorySave((char *) filename) < 0) {
+        return handle_ln_error(L);
+    }
+    return handle_ln_ok(L);
 }
 
-/* XXX error checking */
 static int l_historyload(lua_State *L)
 {
     const char *filename = luaL_checkstring(L, 1);
 
-    linenoiseHistoryLoad((char *) filename);
+    if(linenoiseHistoryLoad((char *) filename) < 0) {
+        return handle_ln_error(L);
+    }
+    return handle_ln_ok(L);
 }
 
 static int l_clearscreen(lua_State *L)

@@ -23,6 +23,8 @@
 #include <lauxlib.h>
 #include <linenoise.h>
 
+#define LN_COMPLETION_TYPE "linenoiseCompletions*"
+
 static int completion_func_ref;
 static lua_State *completion_state;
 
@@ -43,7 +45,10 @@ static void completion_callback_wrapper(const char *line, linenoiseCompletions *
     lua_State *L = completion_state;
 
     lua_rawgeti(L, LUA_REGISTRYINDEX, completion_func_ref);
-    lua_pushlightuserdata(L, completions);
+    *((linenoiseCompletions **) lua_newuserdata(L, sizeof(linenoiseCompletions *))) = completions;
+    luaL_getmetatable(L, LN_COMPLETION_TYPE);
+    lua_setmetatable(L, -2);
+
     lua_pushstring(L, line);
 
     lua_pcall(L, 2, 0, 0);
@@ -126,8 +131,7 @@ static int l_setcompletion(lua_State *L)
 
 static int l_addcompletion(lua_State *L)
 {
-    /* XXX type check */
-    linenoiseCompletions *completions = (linenoiseCompletions *) lua_touserdata(L, 1);
+    linenoiseCompletions *completions = *((linenoiseCompletions **) luaL_checkudata(L, 1, LN_COMPLETION_TYPE));
     const char *entry                 = luaL_checkstring(L, 2);
 
     linenoiseAddCompletion(completions, (char *) entry);
@@ -150,6 +154,11 @@ luaL_Reg linenoise_funcs[] = {
 int luaopen_linenoise(lua_State *L)
 {
     lua_newtable(L);
+
+    luaL_newmetatable(L, LN_COMPLETION_TYPE);
+    lua_pushboolean(L, 0);
+    lua_setfield(L, -2, "__metatable");
+    lua_pop(L, 1);
 
     luaL_register(L, NULL, linenoise_funcs);
     return 1;

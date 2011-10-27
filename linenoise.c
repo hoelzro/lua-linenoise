@@ -43,7 +43,10 @@ static int l_linenoise(lua_State *L)
 {
     const char *prompt = luaL_checkstring(L, 1);
 
+    completionState = L;
     lua_pushstring(L, linenoise(prompt));
+    completionState = NULL;
+
     return 1;
 }
 
@@ -96,7 +99,6 @@ static int l_setcompletion(lua_State *L)
     lua_pushvalue(L, 1);
     completionFuncRef = luaL_ref(L, LUA_REGISTRYINDEX);
     linenoiseSetCompletionCallback(completionCallbackWrapper);
-    completionState = L;
 
     return 0;
 }

@@ -115,7 +115,7 @@ static int l_historyload(lua_State *L)
 static int l_clearscreen(lua_State *L)
 {
     linenoiseClearScreen();
-    return 0;
+    return handle_ln_ok(L);
 }
 
 static int l_setcompletion(lua_State *L)
@@ -126,7 +126,7 @@ static int l_setcompletion(lua_State *L)
     completion_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
     linenoiseSetCompletionCallback(completion_callback_wrapper);
 
-    return 0;
+    return handle_ln_ok(L);
 }
 
 static int l_addcompletion(lua_State *L)
@@ -136,7 +136,7 @@ static int l_addcompletion(lua_State *L)
 
     linenoiseAddCompletion(completions, (char *) entry);
 
-    return 0;
+    return handle_ln_ok(L);
 }
 
 luaL_Reg linenoise_funcs[] = {

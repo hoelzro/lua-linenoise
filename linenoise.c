@@ -21,7 +21,7 @@
 
 #include <lua.h>
 #include <lauxlib.h>
-#include <linenoise.h>
+#include "linenoise.h"
 
 #define LN_COMPLETION_TYPE "linenoiseCompletions*"
 
@@ -159,7 +159,10 @@ int luaopen_linenoise(lua_State *L)
     lua_pushboolean(L, 0);
     lua_setfield(L, -2, "__metatable");
     lua_pop(L, 1);
-
+#if LUA_VERSION_NUM > 501
+    luaL_setfuncs(L,linenoise_funcs,0);
+#else
     luaL_register(L, NULL, linenoise_funcs);
+#endif
     return 1;
 }

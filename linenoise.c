@@ -21,7 +21,7 @@
 
 #include <lua.h>
 #include <lauxlib.h>
-#include <linenoise.h>
+#include "linenoise.h"
 
 #define LN_COMPLETION_TYPE "linenoiseCompletions*"
 

@@ -1,7 +1,7 @@
-CFLAGS=-fPIC -I/usr/include/lua5.1 -Ilib
+CFLAGS=-fPIC -I/usr/include/lua5.1
 
-linenoise.so: linenoise.o lib/linenoise.o
-	gcc -o linenoise.so -shared linenoise.o lib/linenoise.o
+linenoise.so: linenoise.o linenoiselib.o
+	gcc -o linenoise.so -shared linenoise.o linenoiselib.o
 
 clean:
 	rm -f *.o *.so

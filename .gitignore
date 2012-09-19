@@ -1,2 +1,5 @@
 *.o
 *.so
+*.dylib
+*.rock
+history.txt

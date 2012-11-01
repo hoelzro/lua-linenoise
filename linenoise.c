@@ -148,6 +148,13 @@ luaL_Reg linenoise_funcs[] = {
     { "clearscreen", l_clearscreen },
     { "setcompletion", l_setcompletion},
     { "addcompletion", l_addcompletion },
+
+    /* Aliases for more consistent function names */
+    { "addhistory", l_historyadd },
+    { "sethistorymaxlen", l_historysetmaxlen },
+    { "savehistory", l_historysave },
+    { "loadhistory", l_historyload },
+
     { NULL, NULL }
 };
 

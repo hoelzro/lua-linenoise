@@ -72,17 +72,17 @@ static int l_linenoise(lua_State *L)
 
 static int lines_next(lua_State *L)
 {
-	lua_pushcfunction(L, l_linenoise);
-	lua_pushvalue(L, lua_upvalueindex(1));
-	lua_call(L, 1, 1);
-	return 1;
+        lua_pushcfunction(L, l_linenoise);
+        lua_pushvalue(L, lua_upvalueindex(1));
+        lua_call(L, 1, 1);
+        return 1;
 }
 
 static int l_lines(lua_State *L)
 {
-	luaL_checkstring(L, 1);
-	lua_pushcclosure(L, lines_next, 1);
-	return 1;
+        luaL_checkstring(L, 1);
+        lua_pushcclosure(L, lines_next, 1);
+        return 1;
 }
 
 static int l_historyadd(lua_State *L)

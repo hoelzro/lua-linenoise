@@ -1,3 +1,6 @@
+/* vim:sts=4 sw=4 expandtab
+ */
+
 /*
 * Copyright (c) 2011-2012 Rob Hoelz <rob@hoelz.ro>
 *

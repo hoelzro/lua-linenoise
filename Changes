@@ -1,3 +1,7 @@
+0.4    2012 Dec 18
+       - Offer more options when building.
+       - Update bundled version of linenoise.
+
 0.3    2012 Sep 19
        - Update rockspec and upload to luarocks.
 

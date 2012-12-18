@@ -1,7 +1,7 @@
 package = 'linenoise'
 version = '0.4-1'
 source = {
-  url = 'https://github.com/downloads/hoelzro/lua-linenoise/lua-linenoise-0.4.tar.gz',
+  url = 'https://github.com/hoelzro/lua-linenoise/archive/0.04.tar.gz',
 }
 description = {
   summary  = 'A binding for the linenoise command line library',

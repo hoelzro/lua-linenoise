@@ -1,16 +1,20 @@
 OS=$(shell uname)
 
+OBJECTS=linenoise.o
+
 ifeq ($(LIBLINENOISE),)
-LIBLINENOISE=linenoiselib.o
+  OBJECTS+=linenoiselib.o
+else
+  OPT_LIB=$(LIBLINENOISE)
 endif
 
 ifeq ($(OS),Darwin)
-linenoise.dylib: linenoise.o $(LIBLINENOISE)
-	gcc -o $@ -bundle -undefined dynamic_lookup $^
+linenoise.dylib: $(OBJECTS)
+	gcc -o $@ -bundle -undefined dynamic_lookup $^ $(OPT_LIB)
 else
 CFLAGS=-fPIC -I/usr/include/lua5.1
-linenoise.so: linenoise.o $(LIBLINENOISE)
-	gcc -o $@ -shared $^
+linenoise.so: $(OBJECTS)
+	gcc -o $@ -shared $^ $(OPT_LIB)
 endif
 
 clean:

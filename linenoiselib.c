@@ -293,6 +293,8 @@ static int linenoisePrompt(int fd, char *buf, size_t buflen, const char *prompt)
     size_t len = 0;
     size_t cols = getColumns();
     int history_index = 0;
+    size_t old_pos;
+    size_t diff;
 
     buf[0] = '\0';
     buflen--; /* Make sure there is always space for the nulterm */
@@ -387,21 +389,7 @@ right_arrow:
                     pos++;
                     refreshLine(fd,prompt,buf,len,pos,cols);
                 }
-            } else if (seq[0] == 79 && seq[1] == 72) {
-                 /* home button */
-                 if (pos > 0) {
-                     pos = 0;
-                     refreshLine(fd,prompt,buf,len,pos,cols);
-                 }
-             } else if (seq[0] == 79 && seq[1] == 70) {
-                 /* end button */
-                 if (pos != len) {
-                     pos = len;
-                     refreshLine(fd,prompt,buf,len,pos,cols);
-                 }
-             }
-
-             else if (seq[0] == 91 && (seq[1] == 65 || seq[1] == 66)) {
+            } else if (seq[0] == 91 && (seq[1] == 65 || seq[1] == 66)) {
 up_down_arrow:
                 /* up and down arrow: history */
                 if (history_len > 1) {
@@ -482,6 +470,18 @@ up_down_arrow:
         case 12: /* ctrl+l, clear screen */
             linenoiseClearScreen();
             refreshLine(fd,prompt,buf,len,pos,cols);
+            break;
+        case 23: /* ctrl+w, delete previous word */
+            old_pos = pos;
+            while (pos > 0 && buf[pos-1] == ' ')
+                pos--;
+            while (pos > 0 && buf[pos-1] != ' ')
+                pos--;
+            diff = old_pos - pos;
+            memmove(&buf[pos], &buf[old_pos], len-old_pos+1);
+            len -= diff;
+            refreshLine(fd,prompt,buf,len,pos,cols);
+            break;
         }
     }
     return len;
@@ -557,12 +557,6 @@ int linenoiseHistoryAdd(const char *line) {
         if (history == NULL) return 0;
         memset(history,0,(sizeof(char*)*history_max_len));
     }
-    //do not insert duplicate lines into history
-    
-    if (history_len > 0 && !strcmp(line, history[history_len - 1])) {
-		return 0;
-	}
-	
     linecopy = strdup(line);
     if (!linecopy) return 0;
     if (history_len == history_max_len) {

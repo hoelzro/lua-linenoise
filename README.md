@@ -3,6 +3,15 @@
 Linenoise (https://github.com/antirez/linenoise) is a delightfully simple command
 line library.  This Lua module is simply a binding for it.
 
+# Compilation
+
+When building this module using make, you need to specify the linenoise library to use:
+```sh
+make LIBLINENOISE=-llinenoise
+# OR:
+make LIBLINENOISE=/path/to/liblinenoise.a
+```
+
 # Usage
 
 This library is a fairly thin wrapper over linenoise itself, so the function calls

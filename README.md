@@ -9,7 +9,9 @@ This repository also contains a Windows-compatible version of linenoise taken fr
 
 # Compilation
 
-When building this module using make, you may use the original linenoise source included in
+If you use LuaRocks, you can run `luarocks make` on the latest rockspec.
+
+You can also build with make. When building this module using make, you may use the original linenoise source included in
 the repository, or you may set the Makefile variable `LIBLINENOISE` to override
 it:
 

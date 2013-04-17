@@ -3,3 +3,6 @@
 *.dylib
 *.rock
 history.txt
+
+VSProj/Release/*.*
+VSProj/Debug/*.*

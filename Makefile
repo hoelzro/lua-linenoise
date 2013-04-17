@@ -1,6 +1,6 @@
 OS=$(shell uname)
 
-OBJECTS=linenoise.o
+OBJECTS=lua-linenoise.o
 
 ifeq ($(LIBLINENOISE),)
   OBJECTS+=linenoiselib.o

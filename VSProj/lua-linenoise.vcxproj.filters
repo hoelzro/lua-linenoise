@@ -32,7 +32,7 @@
     <ClCompile Include="..\linenoise-windows\win32fixes.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lua_linenoise.c">
+    <ClCompile Include="..\lua-linenoise.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

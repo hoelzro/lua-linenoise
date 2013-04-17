@@ -86,7 +86,7 @@
   <ItemGroup>
     <ClCompile Include="..\linenoise-windows\linenoise.c" />
     <ClCompile Include="..\linenoise-windows\win32fixes.c" />
-    <ClCompile Include="..\lua_linenoise.c" />
+    <ClCompile Include="..\lua-linenoise.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

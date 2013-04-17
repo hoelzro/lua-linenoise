@@ -1,4 +1,4 @@
-﻿package = "linenoise-windows"
+package = "linenoise-windows"
 version = "0.5-1"
 source = {
 	url = "https://github.com/Choonster/lua-linenoise-windows/archive/0.05.tar.gz",

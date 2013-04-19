@@ -1,8 +1,8 @@
 ﻿package = "linenoise-windows"
 version = "0.5.3-1"
 source = {
-	url = "https://github.com/Choonster/lua-linenoise-windows/archive/0.05-3.tar.gz",
-	dir = "lua-linenoise-windows-0.05-3",
+	url = "https://github.com/Choonster/lua-linenoise-windows/archive/0.05.3-1.tar.gz",
+	dir = "lua-linenoise-windows-0.05.3-1",
 }
 description = {
 	summary	= "A binding for the linenoise command line library",

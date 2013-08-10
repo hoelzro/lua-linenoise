@@ -3,8 +3,6 @@
 Linenoise (https://github.com/antirez/linenoise) is a delightfully simple command
 line library.  This Lua module is simply a binding for it.
 
-lua-linenoise was written by Rob Hoelz. You can find the original version [here](https://github.com/hoelzro/lua-linenoise).
-
 This repository also contains a Windows-compatible version of linenoise taken from MSOpenTech's [Windows port](https://github.com/MSOpenTech/redis) of redis.
 
 # Compilation

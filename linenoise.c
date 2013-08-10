@@ -28,6 +28,12 @@
 
 #define LN_COMPLETION_TYPE "linenoiseCompletions*"
 
+#ifdef _WIN32
+#define LN_EXPORT __declspec(dllexport)
+#else
+#define LN_EXPORT extern
+#endif
+
 static int completion_func_ref;
 static lua_State *completion_state;
 
@@ -179,7 +185,7 @@ luaL_Reg linenoise_funcs[] = {
     { NULL, NULL }
 };
 
-int luaopen_linenoise(lua_State *L)
+LN_EXPORT int luaopen_linenoise(lua_State *L)
 {
     lua_newtable(L);
 

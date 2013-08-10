@@ -3,9 +3,15 @@
 Linenoise (https://github.com/antirez/linenoise) is a delightfully simple command
 line library.  This Lua module is simply a binding for it.
 
+lua-linenoise was written by Rob Hoelz. You can find the original version [here](https://github.com/hoelzro/lua-linenoise).
+
+This repository also contains a Windows-compatible version of linenoise taken from MSOpenTech's [Windows port](https://github.com/MSOpenTech/redis) of redis.
+
 # Compilation
 
-When building this module using make, you may use the linenoise source included in
+If you use LuaRocks, you can run `luarocks make` on the latest rockspec.
+
+You can also build with make. When building this module using make, you may use the original linenoise source included in
 the repository, or you may set the Makefile variable `LIBLINENOISE` to override
 it:
 
@@ -14,6 +20,12 @@ make LIBLINENOISE=-llinenoise
 # OR:
 make LIBLINENOISE=/path/to/liblinenoise.a
 ```
+
+You may need to change the value of the LN_EXPORT macro in lua-linenoise.c to the appropriate keyword to ensure the luaopen_linenoise function is exported properly (I don't know much about C or Unix-like systems, so I may have gotten it wrong).
+
+If you have Visual Studio 2012 (even the free Express version), you can compile this module with the Windows-compatible linenoise source using the included solution file (you'll need to edit the include paths and import library dependencies to match your configuration).
+
+If you prefer to compile using other tools, just link lua-linenoise.c with line-noise-windows/linenoise.c and line-noise-windows/win32fixes.c to create the Windows-compatible DLL.
 
 # Usage
 

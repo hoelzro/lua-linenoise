@@ -6,7 +6,7 @@
 *  - modified rename to retry after failure
 */
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__MINGW32__)  /* MinGW doesn't like this file */
 
 #include <process.h>
 #include <stdlib.h>

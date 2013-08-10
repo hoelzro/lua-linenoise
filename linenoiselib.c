@@ -192,6 +192,7 @@ static int win32read(char *c) {
 
                     case VK_ESCAPE: /* ignore - send ctrl-c, will return -1 */
                         *c = 3;
+						/* *c = 21; */ /* Uncomment this line and comment out the one above to make escape delete the line instead of quitting. */
                         return 1;
                     case VK_RETURN:  /* enter */
                         *c = 13;

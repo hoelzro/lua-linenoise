@@ -15,24 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\linenoise-windows\fmacros.h">
+    <ClInclude Include="..\fmacros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\linenoise-windows\linenoise.h">
+    <ClInclude Include="..\linenoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\linenoise-windows\win32fixes.h">
+    <ClInclude Include="..\win32fixes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\linenoise-windows\linenoise.c">
+    <ClCompile Include="..\linenoiselib.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\linenoise-windows\win32fixes.c">
+    <ClCompile Include="..\win32fixes.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lua-linenoise.c">
+    <ClCompile Include="..\linenoise.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

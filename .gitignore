@@ -3,6 +3,10 @@
 *.dylib
 *.rock
 *.dll
+*.def
+*.exp
+*.lib
+*.obj
 history.txt
 
 VSProj/Release/*.*

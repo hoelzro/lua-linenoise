@@ -20,4 +20,14 @@ build = {
       sources   = { 'linenoise.c', 'linenoiselib.c' },
     },
   },
+  platforms = {
+    win32 = {
+      modules = {
+        linenoise = {
+          sources   = { 'linenoise.c', 'linenoiselib.c', 'win32fixes.c' },
+          libraries = { 'ws2_32' },
+        },
+      },
+    },
+  },
 }

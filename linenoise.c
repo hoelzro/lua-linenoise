@@ -67,7 +67,7 @@ static void completion_callback_wrapper(const char *line, linenoiseCompletions *
 static int l_linenoise(lua_State *L)
 {
     const char *prompt = luaL_checkstring(L, 1);
-    const char *line;
+    char *line;
 
     completion_state = L;
     line = linenoise(prompt);

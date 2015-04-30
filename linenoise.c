@@ -24,6 +24,7 @@
 
 #include <lua.h>
 #include <lauxlib.h>
+#include <stdlib.h>
 #include "linenoise.h"
 
 #define LN_COMPLETION_TYPE "linenoiseCompletions*"
@@ -76,6 +77,7 @@ static int l_linenoise(lua_State *L)
         return handle_ln_error(L);
     }
     lua_pushstring(L, line);
+    free(line);
     return 1;
 }
 

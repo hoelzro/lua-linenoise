@@ -1,3 +1,6 @@
+0.8    2015 Apr 29
+       - Fix memory leak (thanks, Dirk Feytons!)
+
 0.7    2015 Feb 24
        - Bump linenoise version
 

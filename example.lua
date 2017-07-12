@@ -5,8 +5,8 @@ local prompt, history = '? ', 'history.txt'
 L.historyload(history) -- load existing history
 L.setcompletion(function(c,s)
    if s == 'h' then
-    L.addcompletion(c,'help')
-    L.addcompletion(c,'halt')
+    c:add('help') -- same as L.addcompletion(c,'help)
+    L.addcompletion(c,'halt') -- same as c:add('halt')
   end
 end)
 local line = L.linenoise(prompt)

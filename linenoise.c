@@ -204,9 +204,11 @@ LN_EXPORT int luaopen_linenoise(lua_State *L)
 
 #if LUA_VERSION_NUM > 501
     luaL_setfuncs(L, linenoise_methods, 0);
+    lua_pop(L, 1);
     luaL_setfuncs(L,linenoise_funcs,0);
 #else
     luaL_register(L, NULL, linenoise_methods);
+    lua_pop(L, 1);
     luaL_register(L, NULL, linenoise_funcs);
 #endif
     return 1;

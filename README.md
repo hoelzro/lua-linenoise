@@ -59,7 +59,7 @@ Clears the screen.
 
 Sets the completion callback.  This callback is called with two arguments:
 
-  * A completions object.  Use L.addcompletion to add a completion to this object.
+  * A completions object.  Use object:add or L.addcompletion to add a completion to this object.
   * The current line of input.
 
 ## L.addcompletion(completions, string)
@@ -77,10 +77,10 @@ local L = require 'linenoise'
 print '----- Testing lua-linenoise! ------'
 local prompt, history = '? ', 'history.txt'
 L.historyload(history) -- load existing history
-L.setcompletion(function(c,s)
-   if s == 'h' then
-    L.addcompletion(c,'help')
-    L.addcompletion(c,'halt')
+L.setcompletion(function(completion,str)
+   if str == 'h' then
+    completion:add('help')
+    completion:add('halt')
   end
 end)
 local line = L.linenoise(prompt)

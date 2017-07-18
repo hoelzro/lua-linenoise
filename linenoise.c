@@ -187,6 +187,11 @@ luaL_Reg linenoise_funcs[] = {
     { NULL, NULL }
 };
 
+luaL_Reg linenoise_methods[] = {
+    { "add", l_addcompletion },
+    { NULL, NULL }
+};
+
 LN_EXPORT int luaopen_linenoise(lua_State *L)
 {
     lua_newtable(L);
@@ -194,10 +199,14 @@ LN_EXPORT int luaopen_linenoise(lua_State *L)
     luaL_newmetatable(L, LN_COMPLETION_TYPE);
     lua_pushboolean(L, 0);
     lua_setfield(L, -2, "__metatable");
-    lua_pop(L, 1);
+    lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+
 #if LUA_VERSION_NUM > 501
+    luaL_setfuncs(L, linenoise_methods, 0);
     luaL_setfuncs(L,linenoise_funcs,0);
 #else
+    luaL_register(L, NULL, linenoise_methods);
     luaL_register(L, NULL, linenoise_funcs);
 #endif
     return 1;

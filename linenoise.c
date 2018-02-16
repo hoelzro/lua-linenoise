@@ -152,6 +152,12 @@ static int l_linenoise(lua_State *L)
     completion_state = NULL;
 
     if(! line) {
+        lua_rawgeti(L, LUA_REGISTRYINDEX, callback_error_ref);
+        if(strlen(lua_tostring(L, -1)) != 0) {
+            lua_pushnil(L);
+            lua_insert(L, -2);
+            return 2;
+        }
         return handle_ln_error(L);
     }
     lua_rawgeti(L, LUA_REGISTRYINDEX, callback_error_ref);

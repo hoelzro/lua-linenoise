@@ -33,7 +33,7 @@ are named similarly.  I may develop a "porcelain" layer in the future.
 ## L.linenoise(prompt)
 
 Prompts for a line of input, using *prompt* as the prompt string.  Returns nil if
-no more input is available.
+no more input is available; Returns nil and an error string if an error occurred.
 
 ## L.historyadd(line)
 

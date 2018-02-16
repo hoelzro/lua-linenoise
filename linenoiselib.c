@@ -352,7 +352,9 @@ static int completeLine(struct linenoiseState *ls) {
     int nread, nwritten;
     char c = 0;
 
-    completionCallback(ls->buf,&lc);
+    if(completionCallback(ls->buf,&lc)) {
+        return -1;
+    }
     if (lc.len == 0) {
         linenoiseBeep();
     } else {

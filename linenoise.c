@@ -261,7 +261,11 @@ static int l_setcompletion(lua_State *L)
         luaL_checktype(L, 1, LUA_TFUNCTION);
 
         lua_pushvalue(L, 1);
-        completion_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+        if(completion_func_ref == LUA_NOREF) {
+            completion_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+        } else {
+            lua_rawseti(L, LUA_REGISTRYINDEX, completion_func_ref);
+        }
         linenoiseSetCompletionCallback(completion_callback_wrapper);
     }
 
@@ -301,7 +305,11 @@ l_sethints(lua_State *L)
         luaL_checktype(L, 1, LUA_TFUNCTION);
 
         lua_pushvalue(L, 1);
-        hints_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+        if(hints_func_ref == LUA_NOREF) {
+            hints_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+        } else {
+            lua_rawseti(L, LUA_REGISTRYINDEX, hints_func_ref);
+        }
         linenoiseSetHintsCallback(hints_callback_wrapper);
         linenoiseSetFreeHintsCallback(free_hints_callback);
     }

@@ -49,7 +49,7 @@ typedef struct linenoiseCompletions {
 } linenoiseCompletions;
 
 typedef int(linenoiseCompletionCallback)(const char *, linenoiseCompletions *);
-typedef char*(linenoiseHintsCallback)(const char *, int *color, int *bold);
+typedef char*(linenoiseHintsCallback)(const char *, int *color, int *bold, int *err);
 typedef void(linenoiseFreeHintsCallback)(void *);
 void linenoiseSetCompletionCallback(linenoiseCompletionCallback *);
 void linenoiseSetHintsCallback(linenoiseHintsCallback *);

@@ -139,7 +139,7 @@ static int l_linenoise(lua_State *L)
         return handle_ln_error(L);
     }
     lua_pushstring(L, line);
-    free(line);
+    linenoiseFree(line);
     return 1;
 }
 

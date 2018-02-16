@@ -52,7 +52,7 @@ static int handle_ln_ok(lua_State *L)
     return 1;
 }
 
-static void completion_callback_wrapper(const char *line, linenoiseCompletions *completions)
+static int completion_callback_wrapper(const char *line, linenoiseCompletions *completions)
 {
     lua_State *L = completion_state;
 
@@ -65,6 +65,8 @@ static void completion_callback_wrapper(const char *line, linenoiseCompletions *
 
     // XXX handle error
     lua_pcall(L, 2, 0, 0);
+
+    return 0;
 }
 
 static char *

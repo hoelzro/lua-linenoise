@@ -93,7 +93,6 @@ hints_callback_wrapper(const char *line, int *color, int *bold, int *err)
         return NULL;
     }
 
-    // XXX if it's not a table, or if the fields aren't of the correct types...
     if(!lua_isnoneornil(L, -2)) {
         if(lua_isstring(L, -2)) {
             const char *hint;
@@ -106,20 +105,40 @@ hints_callback_wrapper(const char *line, int *color, int *bold, int *err)
             if(result) {
                 strcpy(result, hint);
             }
-        } // XXX error otherwise
+        } else {
+            lua_pushfstring(L, "Invalid first value of type '%s' from hints callback - string or nil required", lua_typename(L, lua_type(L, -2)));
+            lua_rawseti(L, LUA_REGISTRYINDEX, callback_error_ref);
+            *err = 1;
+            lua_pop(L, 2);
+            return NULL;
+        }
 
         if(!lua_isnoneornil(L, -1)) {
             if(lua_istable(L, -1)) {
                 lua_getfield(L, -1, "color");
-                if(lua_isinteger(L, -1)) {
+                if(lua_isnumber(L, -1)) {
                     *color = lua_tointeger(L, -1);
+                } else if(!lua_isnoneornil(L, -1)) {
+                    lua_pushfstring(L, "Invalid color value of type '%s' from hints callback - number or nil required", lua_typename(L, lua_type(L, -1)));
+                    lua_rawseti(L, LUA_REGISTRYINDEX, callback_error_ref);
+                    *err = 1;
+                    lua_pop(L, 3);
+                    // return the result to allow linenoise to free it
+                    return result;
                 }
                 lua_pop(L, 1);
 
                 lua_getfield(L, -1, "bold");
                 *bold = lua_toboolean(L, -1);
                 lua_pop(L, 1);
-            } // XXX error otherwise
+            } else {
+                lua_pushfstring(L, "Invalid second value of type '%s' from hints callback - table or nil required", lua_typename(L, lua_type(L, -1)));
+                lua_rawseti(L, LUA_REGISTRYINDEX, callback_error_ref);
+                *err = 1;
+                lua_pop(L, 2);
+                // return the result to allow linenoise to free it
+                return result;
+            }
         }
     }
 

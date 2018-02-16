@@ -109,13 +109,16 @@ L.sethints(function(str)
     return ' bold hints in red', { color = colors.red, bold = true }
   end
 end)
-local line = L.linenoise(prompt)
+local line, err = L.linenoise(prompt)
 while line do
     if #line > 0 then
         print(line:upper())
         L.historyadd(line)
         L.historysave(history) -- save every new line
     end
-    line = L.linenoise(prompt)
+    line, err = L.linenoise(prompt)
+end
+if err then
+  print('An error occurred: ' .. err)
 end
 ```

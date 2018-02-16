@@ -9,6 +9,12 @@ L.setcompletion(function(c,s)
     L.addcompletion(c,'halt') -- same as c:add('halt')
   end
 end)
+L.sethints(function(s)
+  if s == 'h' then
+    return { hint = 'test hint' }
+  end
+end)
+
 local line = L.linenoise(prompt)
 while line do
     if #line > 0 then

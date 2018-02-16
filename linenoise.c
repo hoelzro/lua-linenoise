@@ -25,6 +25,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 #include <stdlib.h>
+#include <string.h>
 #include "linenoise.h"
 
 #define LN_COMPLETION_TYPE "linenoiseCompletions*"
@@ -36,6 +37,7 @@
 #endif
 
 static int completion_func_ref;
+static int hints_func_ref;
 static lua_State *completion_state;
 
 static int handle_ln_error(lua_State *L)
@@ -61,7 +63,67 @@ static void completion_callback_wrapper(const char *line, linenoiseCompletions *
 
     lua_pushstring(L, line);
 
+    // XXX handle error
     lua_pcall(L, 2, 0, 0);
+}
+
+// XXX document this
+static char *
+hints_callback_wrapper(const char *line, int *color, int *bold)
+{
+    lua_State *L = completion_state;
+    char *result = NULL;
+
+    lua_rawgeti(L, LUA_REGISTRYINDEX, hints_func_ref);
+
+    lua_pushstring(L, line);
+
+    // XXX handle error
+    lua_pcall(L, 1, 1, 0);
+
+    // XXX if it's not a table, or if the fields aren't of the correct types...
+    if(lua_istable(L, -1)) {
+        lua_getfield(L, -1, "hint"); // XXX or t[1]?
+        if(lua_isstring(L, -1)) {
+            const char *hint;
+            lua_Alloc alloc_f;
+            void *ud;
+
+            hint = lua_tostring(L, -1);
+            alloc_f = lua_getallocf(L, &ud);
+            result = alloc_f(&ud, NULL, LUA_TSTRING, strlen(hint) + 1);
+            if(result) {
+                strcpy(result, hint);
+            }
+        }
+        lua_pop(L, 1);
+
+        lua_getfield(L, -1, "color");
+        if(lua_isinteger(L, -1)) {
+            *color = lua_tointeger(L, -1);
+        }
+        lua_pop(L, 1);
+
+        lua_getfield(L, -1, "bold");
+        *bold = lua_toboolean(L, -1);
+        lua_pop(L, 1);
+    }
+
+    lua_pop(L, 1);
+
+    return result;
+}
+
+static void
+free_hints_callback(void *p)
+{
+    lua_State *L = completion_state;
+    lua_Alloc alloc_f;
+    void *ud;
+
+    alloc_f = lua_getallocf(L, &ud);
+
+    alloc_f(ud, p, 0, 0);
 }
 
 static int l_linenoise(lua_State *L)
@@ -175,6 +237,19 @@ l_setmultiline(lua_State *L)
     return handle_ln_ok(L);
 }
 
+// XXX if you set to nil, remove the hints callback (do similar for completion callback)
+static int
+l_sethints(lua_State *L)
+{
+    luaL_checktype(L, 1, LUA_TFUNCTION);
+
+    lua_pushvalue(L, 1);
+    hints_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+    linenoiseSetHintsCallback(hints_callback_wrapper);
+    linenoiseSetFreeHintsCallback(free_hints_callback);
+    return handle_ln_ok(L);
+}
+
 luaL_Reg linenoise_funcs[] = {
     { "linenoise", l_linenoise },
     { "historyadd", l_historyadd },
@@ -185,6 +260,7 @@ luaL_Reg linenoise_funcs[] = {
     { "setcompletion", l_setcompletion},
     { "addcompletion", l_addcompletion },
     { "setmultiline", l_setmultiline },
+    { "sethints", l_sethints },
 
     /* Aliases for more consistent function names */
     { "addhistory", l_historyadd },

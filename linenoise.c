@@ -36,6 +36,10 @@
 #define LN_EXPORT extern
 #endif
 
+#ifndef LUA_OK
+#define LUA_OK 0
+#endif
+
 static int completion_func_ref = LUA_NOREF;
 static int hints_func_ref = LUA_NOREF;
 static lua_State *completion_state;

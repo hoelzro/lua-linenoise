@@ -67,7 +67,6 @@ static void completion_callback_wrapper(const char *line, linenoiseCompletions *
     lua_pcall(L, 2, 0, 0);
 }
 
-// XXX document this
 static char *
 hints_callback_wrapper(const char *line, int *color, int *bold)
 {

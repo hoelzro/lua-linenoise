@@ -69,10 +69,31 @@ Adds *string* to the list of completions.
 All functions return nil on error; functions that don't have an obvious return value
 return true on success.
 
+## L.setmultiline(multiline)
+
+Enables multi-line mode if *multiline* is true, disables otherwise.
+
+## L.sethints(callback)
+
+Sets a hints callback to provide hint information on the right hand side of the
+prompt.  *calback* should be a function that takes a single parameter (a
+string, the line entered so far) and returns zero, one, or two values.  Zero
+values means no hint.  The first value may be *nil* for no hint, or a string
+value for a hint.  If the first value is a string, the second value may be a table
+with the *color* and *bold* keys - *color* is an ANSI terminal color code (such as
+those provided by the [lua-term](https://luarocks.org/modules/hoelzro/lua-term) colors
+module), whereas *bold* is a boolean indicating whether or not the hint should be printed
+as bold.
+
+## L.printkeycodes()
+
+Prints linenoise key codes.  Primarly used for debugging.
+
 # Example
 
 ```lua
 local L = require 'linenoise'
+local colors = require('term').colors -- optional
 -- L.clearscreen()
 print '----- Testing lua-linenoise! ------'
 local prompt, history = '? ', 'history.txt'
@@ -81,6 +102,11 @@ L.setcompletion(function(completion,str)
    if str == 'h' then
     completion:add('help')
     completion:add('halt')
+  end
+end)
+L.sethints(function(str)
+  if str == 'h' then
+    return ' bold hints in red', { color = colors.red, bold = true }
   end
 end)
 local line = L.linenoise(prompt)

@@ -79,37 +79,39 @@ hints_callback_wrapper(const char *line, int *color, int *bold)
     lua_pushstring(L, line);
 
     // XXX handle error
-    lua_pcall(L, 1, 1, 0);
+    lua_pcall(L, 1, 2, 0);
 
     // XXX if it's not a table, or if the fields aren't of the correct types...
-    if(lua_istable(L, -1)) {
-        lua_getfield(L, -1, "hint"); // XXX or t[1]?
-        if(lua_isstring(L, -1)) {
+    if(!lua_isnoneornil(L, -2)) {
+        if(lua_isstring(L, -2)) {
             const char *hint;
             lua_Alloc alloc_f;
             void *ud;
 
-            hint = lua_tostring(L, -1);
+            hint = lua_tostring(L, -2);
             alloc_f = lua_getallocf(L, &ud);
             result = alloc_f(&ud, NULL, LUA_TSTRING, strlen(hint) + 1);
             if(result) {
                 strcpy(result, hint);
             }
-        }
-        lua_pop(L, 1);
+        } // XXX error otherwise
 
-        lua_getfield(L, -1, "color");
-        if(lua_isinteger(L, -1)) {
-            *color = lua_tointeger(L, -1);
-        }
-        lua_pop(L, 1);
+        if(!lua_isnoneornil(L, -1)) {
+            if(lua_istable(L, -1)) {
+                lua_getfield(L, -1, "color");
+                if(lua_isinteger(L, -1)) {
+                    *color = lua_tointeger(L, -1);
+                }
+                lua_pop(L, 1);
 
-        lua_getfield(L, -1, "bold");
-        *bold = lua_toboolean(L, -1);
-        lua_pop(L, 1);
+                lua_getfield(L, -1, "bold");
+                *bold = lua_toboolean(L, -1);
+                lua_pop(L, 1);
+            } // XXX error otherwise
+        }
     }
 
-    lua_pop(L, 1);
+    lua_pop(L, 2);
 
     return result;
 }

@@ -11,7 +11,7 @@ L.setcompletion(function(c,s)
 end)
 L.sethints(function(s)
   if s == 'h' then
-    return { hint = 'test hint' }
+    return ' test hint'
   end
 end)
 

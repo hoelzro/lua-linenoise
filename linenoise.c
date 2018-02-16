@@ -250,6 +250,13 @@ l_sethints(lua_State *L)
     return handle_ln_ok(L);
 }
 
+static int
+l_printkeycodes(lua_State *L)
+{
+    linenoisePrintKeyCodes();
+    return handle_ln_ok(L);
+}
+
 luaL_Reg linenoise_funcs[] = {
     { "linenoise", l_linenoise },
     { "historyadd", l_historyadd },
@@ -261,6 +268,7 @@ luaL_Reg linenoise_funcs[] = {
     { "addcompletion", l_addcompletion },
     { "setmultiline", l_setmultiline },
     { "sethints", l_sethints },
+    { "printkeycodes", l_printkeycodes },
 
     /* Aliases for more consistent function names */
     { "addhistory", l_historyadd },

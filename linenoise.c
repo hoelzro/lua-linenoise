@@ -76,17 +76,22 @@ static int completion_callback_wrapper(const char *line, linenoiseCompletions *c
 }
 
 static char *
-hints_callback_wrapper(const char *line, int *color, int *bold)
+hints_callback_wrapper(const char *line, int *color, int *bold, int *err)
 {
     lua_State *L = completion_state;
     char *result = NULL;
+    int status;
 
     lua_rawgeti(L, LUA_REGISTRYINDEX, hints_func_ref);
 
     lua_pushstring(L, line);
 
-    // XXX handle error
-    lua_pcall(L, 1, 2, 0);
+    status = lua_pcall(L, 1, 2, 0);
+    if(status != LUA_OK) {
+        lua_rawseti(L, LUA_REGISTRYINDEX, callback_error_ref);
+        *err = 1;
+        return NULL;
+    }
 
     // XXX if it's not a table, or if the fields aren't of the correct types...
     if(!lua_isnoneornil(L, -2)) {

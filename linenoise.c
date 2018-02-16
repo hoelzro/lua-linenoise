@@ -36,8 +36,8 @@
 #define LN_EXPORT extern
 #endif
 
-static int completion_func_ref;
-static int hints_func_ref;
+static int completion_func_ref = LUA_NOREF;
+static int hints_func_ref = LUA_NOREF;
 static lua_State *completion_state;
 static int callback_error_ref;
 
@@ -253,11 +253,17 @@ static int l_clearscreen(lua_State *L)
 
 static int l_setcompletion(lua_State *L)
 {
-    luaL_checktype(L, 1, LUA_TFUNCTION);
+    if(lua_isnoneornil(L, 1)) {
+        luaL_unref(L, LUA_REGISTRYINDEX, completion_func_ref);
+        completion_func_ref = LUA_NOREF;
+        linenoiseSetCompletionCallback(NULL);
+    } else {
+        luaL_checktype(L, 1, LUA_TFUNCTION);
 
-    lua_pushvalue(L, 1);
-    completion_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
-    linenoiseSetCompletionCallback(completion_callback_wrapper);
+        lua_pushvalue(L, 1);
+        completion_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+        linenoiseSetCompletionCallback(completion_callback_wrapper);
+    }
 
     return handle_ln_ok(L);
 }
@@ -282,16 +288,23 @@ l_setmultiline(lua_State *L)
     return handle_ln_ok(L);
 }
 
-// XXX if you set to nil, remove the hints callback (do similar for completion callback)
 static int
 l_sethints(lua_State *L)
 {
-    luaL_checktype(L, 1, LUA_TFUNCTION);
+    if(lua_isnoneornil(L, 1)) {
+        luaL_unref(L, LUA_REGISTRYINDEX, hints_func_ref);
+        hints_func_ref = LUA_NOREF;
 
-    lua_pushvalue(L, 1);
-    hints_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
-    linenoiseSetHintsCallback(hints_callback_wrapper);
-    linenoiseSetFreeHintsCallback(free_hints_callback);
+        linenoiseSetHintsCallback(NULL);
+        linenoiseSetFreeHintsCallback(NULL);
+    } else {
+        luaL_checktype(L, 1, LUA_TFUNCTION);
+
+        lua_pushvalue(L, 1);
+        hints_func_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+        linenoiseSetHintsCallback(hints_callback_wrapper);
+        linenoiseSetFreeHintsCallback(free_hints_callback);
+    }
     return handle_ln_ok(L);
 }
 

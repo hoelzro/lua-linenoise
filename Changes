@@ -1,3 +1,8 @@
+0.9    2018 Feb 20
+       - Unicode 9.0 support
+       - UTF8 support
+       - ANSI support
+
 0.8    2015 Apr 29
        - Fix memory leak (thanks, Dirk Feytons!)
 

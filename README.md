@@ -3,6 +3,9 @@
 Linenoise (https://github.com/antirez/linenoise) is a delightfully simple command
 line library.  This Lua module is simply a binding for it.
 
+The main Linenoise upstream has stagnated a bit, so this binding tracks https://github.com/yhirose/linenoise/tree/utf8-support, which
+includes things like UTF-8 support and ANSI terminal escape sequence detection.
+
 This repository also contains a Windows-compatible version of linenoise taken from MSOpenTech's [Windows port](https://github.com/MSOpenTech/redis) of redis.
 
 # Compilation

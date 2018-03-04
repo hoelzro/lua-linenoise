@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "linenoise.h"
+#include "encodings/utf8.h"
 
 #define LN_COMPLETION_TYPE "linenoiseCompletions*"
 
@@ -327,6 +328,17 @@ l_printkeycodes(lua_State *L)
     return handle_ln_ok(L);
 }
 
+static int
+l_enableutf8(lua_State *L)
+{
+    linenoiseSetEncodingFunctions(
+            linenoiseUtf8PrevCharLen,
+            linenoiseUtf8NextCharLen,
+            linenoiseUtf8ReadCode);
+
+    return 0;
+}
+
 luaL_Reg linenoise_funcs[] = {
     { "linenoise", l_linenoise },
     { "historyadd", l_historyadd },
@@ -339,6 +351,7 @@ luaL_Reg linenoise_funcs[] = {
     { "setmultiline", l_setmultiline },
     { "sethints", l_sethints },
     { "printkeycodes", l_printkeycodes },
+    { "enableutf8", l_enableutf8 },
 
     /* Aliases for more consistent function names */
     { "addhistory", l_historyadd },

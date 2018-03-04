@@ -1,6 +1,6 @@
 OS=$(shell uname)
 
-OBJECTS=linenoise.o
+OBJECTS=linenoise.o encodings/utf8.o
 
 ifeq ($(LIBLINENOISE),)
   OBJECTS+=linenoiselib.o
@@ -18,4 +18,4 @@ linenoise.so: $(OBJECTS)
 endif
 
 clean:
-	rm -f *.o *.so *.dylib
+	rm -f *.o encodings/*.o *.so *.dylib

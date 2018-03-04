@@ -15,6 +15,8 @@ L.sethints(function(s)
   end
 end)
 
+L.enableutf8()
+
 local line, err = L.linenoise(prompt)
 while line do
     if #line > 0 then

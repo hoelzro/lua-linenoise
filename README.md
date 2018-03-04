@@ -92,6 +92,10 @@ as bold.
 
 Prints linenoise key codes.  Primarly used for debugging.
 
+## L.enableutf8()
+
+Enables UTF-8 handling.
+
 # Example
 
 ```lua
@@ -112,6 +116,9 @@ L.sethints(function(str)
     return ' bold hints in red', { color = colors.red, bold = true }
   end
 end)
+
+L.enableutf8()
+
 local line, err = L.linenoise(prompt)
 while line do
     if #line > 0 then

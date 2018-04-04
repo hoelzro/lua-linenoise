@@ -1,4 +1,4 @@
-0.9    2018 Mar 04
+0.9    2018 Apr 04
        - Add syntactic sugar for addcompletion (thanks, Natanael Copa!)
        - Add bindings for new linenoise functions: setmultiline, sethintscallback, printkeycodes (GH #16, GH #17)
        - Propagate errors in completion callback (GH #14)
